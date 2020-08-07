@@ -5,7 +5,7 @@ export async function up(knex: Knex){
     table.increments('id').primary();//a chave primaria vai ser o id do usuario
     table.string('name').notNullable();//nome do usuario, que não pode ser nulo
     table.string('avatar').notNullable();//foto ou avatar do usuario, que não pode ser nulo
-    table.string('whastapp').notNullable();//wpp do usuario, que não pode ser nulo
+    table.string('whatsapp').notNullable();//wpp do usuario, que não pode ser nulo
     table.string('bio').notNullable();//descrição do usuario, que não pode ser nulo
   });
 }

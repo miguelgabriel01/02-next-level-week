@@ -5,7 +5,7 @@ export async function up(knex: Knex){
   return knex.schema.createTable('class_schedule', table => {
     table.increments('id').primary();//a chave primaria vai ser o id do usuario
 
-    table.integer('week-day').notNullable();//dia da semana, que não pode ser nulo
+    table.integer('week_day').notNullable();//dia da semana, que não pode ser nulo
     table.integer('from').notNullable();//horario de inicio das aulas do professor, que não pode ser nulo
     table.integer('to').notNullable();//horario do fim das aulas do professor, que não pode ser nulo
 
