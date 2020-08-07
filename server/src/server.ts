@@ -1,10 +1,13 @@
 import express from 'express';//importação do express
 import routes from './routes';//importamos o arquivo responsavel pelas rotas da nossa aplicação
+import cors from 'cors';//permite que outras aplicações em endereços diferentes possam usar nossa api
 
 const app = express();//salva em uma constante a função express
 
+app.use(cors());//permite que outras aplicações em endereços diferentes possam usar nossa api
 app.use(express.json());//por padrão, o Express não entendi JSON. por isso, esta configuração deve ser feita 
 app.use(routes);//arquivo de rotas
+
 //--------------------------------------------------------------------------------------------
 //Metodos HTTP:
 

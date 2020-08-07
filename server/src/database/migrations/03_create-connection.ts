@@ -14,7 +14,7 @@ export async function up(knex: Knex){
             .onDelete('CASCADE');//caso um usuario/professor, seja apagado do registro, todas as aulas dele são apagadas
 
             table.timestamp('created_at')
-            .defaultTo('now()')//pega a hora em que a conexão foi feita
+            .defaultTo(knex.raw('CURRENT_TIMESTAMP'))//pega a hora em que a conexão foi feita
             .notNullable();//essa informação não pode ser nula
   });
 }
