@@ -12,6 +12,50 @@ interface ScheduleItem{
 
 
 export default class ClassController {
+  
+  //rota responsavel por listar as aulas cadastradas
+  async index(request:Request, response:Response){
+    const filters = request.query;//constante que vai armazenar os paramentros que neste caso são o dia da semana, horario e materia
+    
+    //CONST QUE TIPAM OS DADOS RECEBIDO 
+    const subject = filters.subject as string;//informa que a const de materias é do tipo texto
+    const week_day = filters.week_day as string;//a const de dia da semana é tipo numero
+    const time = filters.time as string;//a do horario é tipo texto
+
+    if(!filters.week_day || !filters.subject || !filters.time){
+      return response.status(400).json({
+        error: "Missing filters to search classes"
+      });
+    }
+
+    const timeImMinutes = convertHourToMinutes(time);//const que armazena a função que converte horas em minutos
+
+   console.log(timeImMinutes);//retorna no terminal o horario onvertido em minutos
+
+   const classes = await db('classes')
+             //verificamos agora se o horario que o usuario escolheu, tem algum professor disponivel
+             .whereExists(function(){
+               this.select('class_schedule.*')
+               .from('class_schedule')
+               .whereRaw('`class_schedule` . `class_id` = `classes` . `id`')
+               .whereRaw('`class_schedule` . `week_day` = ??', [Number(week_day)])
+               .whereRaw('`class_schedule` .`from` <= ??' , [timeImMinutes])
+               .whereRaw('`class_schedule` .`to` > ??' , [timeImMinutes])
+               
+             })
+    
+            .where('classes.subject', '=', subject)//pŕocura no banco pelas materias informadas
+            .join('users' , 'classes.user_id' , '=' , 'users.id')
+            .select( ['classes.*', 'users.*'] );//todas as informações sobre a aula e usuario(professor que vai dar esta merda de aula)
+
+   return response.json(classes);//lista os dados da materia(se tiver no banco de dados)
+
+
+  }
+
+
+
+  //rota responsavel por cadastrar o usuario, aulas e horarios
   async create( request: Request, response:Response ){
     const {
       name,//nome
@@ -56,7 +100,7 @@ export default class ClassController {
     return {
       class_id,//id da class
        week_day:  scheduleItem.week_day,//dia da semana( 1,2,3,4,5,6,7)
-       from: convertHoursToMinutes(scheduleItem.from),//horario já convertido que o professor começa a dar aula
+       from: convertHourToMinutes(scheduleItem.from),//horario já convertido que o professor começa a dar aula
        to: convertHourToMinutes(scheduleItem.to),//horario que ele encerra as aulas
     };
   });
@@ -79,3 +123,5 @@ export default class ClassController {
   
   }
 }
+
+//DEUS É TOP
