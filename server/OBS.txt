@@ -1,0 +1,11 @@
+INFORMAÇOES SOBRE DEPENDENCIAS BAIXADAS E INFORMAÇÃO SOBRE A API
+
+npm init -y: iniciar o arquivo package.json
+
+npm install typescript -D: instalar a dependencia do typescript
+
+npx tsc --init: criar arquivo de configuração do typescript
+
+npm install ts-node-dev -D: similiar ao Nodemon
+
+npm install @types/express -D: fazer a instalção do modulo express
